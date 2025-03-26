@@ -1,103 +1,125 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState } from "react";
+import Header from "@/components/Header";
+import TabSelector from "@/components/TabSelector";
+import VideoTranslator from "@/components/VideoTranslator";
+import SpeechTranslator from "@/components/SpeechTranslator";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedTab, setSelectedTab] = useState("video");
+  const [targetLanguage, setTargetLanguage] = useState("Spanish");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  // Define tabs with icons
+  const tabs = [
+    {
+      id: "video",
+      name: "Video Translation",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "speech",
+      name: "Speech Translation",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+          />
+        </svg>
+      ),
+    },
+  ];
+
+  // Handle tab change
+  const handleTabChange = (tabId: string) => {
+    setSelectedTab(tabId);
+  };
+
+  // Handle language change
+  const handleLanguageChange = (language: string) => {
+    setTargetLanguage(language);
+  };
+
+  return (
+    <main className="min-h-screen bg-gray-50">
+      <Header />
+
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Real-time AI Translation
+          </h2>
+
+          <div className="mb-6">
+            <TabSelector
+              tabs={tabs}
+              activeTab={selectedTab}
+              onTabChange={handleTabChange}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+
+          <div className="mb-6">
+            <LanguageSelector
+              selectedLanguage={targetLanguage}
+              onLanguageChange={handleLanguageChange}
+            />
+          </div>
+
+          <div className="mt-8">
+            {selectedTab === "video" ? (
+              <VideoTranslator targetLanguage={targetLanguage} />
+            ) : (
+              <SpeechTranslator targetLanguage={targetLanguage} />
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            About AI Translate
+          </h2>
+          <p className="text-gray-600 mb-4">
+            AI Translate is a powerful application that uses OpenAI&apos;s
+            advanced models to provide real-time translation. You can translate
+            video subtitles using OCR technology or convert speech to translated
+            text using OpenAI&apos;s Whisper API.
+          </p>
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <h3 className="font-medium text-blue-800 mb-2">Features:</h3>
+            <ul className="list-disc list-inside text-blue-700 space-y-1">
+              <li>Real-time video subtitle translation using OCR</li>
+              <li>Speech-to-text translation with Whisper API</li>
+              <li>Support for multiple languages</li>
+              <li>High-quality translations powered by OpenAI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

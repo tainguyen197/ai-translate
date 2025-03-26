@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Translate
+
+AI Translate is a powerful web application that provides real-time translation for both video content and speech. The application uses OpenAI's advanced models for high-quality translations.
+
+## Features
+
+- **Video Translation**: Translate subtitles from videos in real-time using OCR technology
+- **Speech-to-Text Translation**: Convert spoken words to translated text using OpenAI's Whisper API
+- **Multiple Languages**: Support for various languages
+- **Real-time Processing**: Get translations as you speak or as video plays
+- **Modern UI**: Clean and intuitive user interface
+
+## Tech Stack
+
+- **Frontend**: Next.js with TypeScript and TailwindCSS
+- **OCR**: Tesseract.js for extracting text from video frames
+- **Speech Recognition**: Web Audio API and MediaRecorder API
+- **AI Translation**: OpenAI GPT-4 for text translation
+- **Speech-to-Text**: OpenAI Whisper API
+
+## Prerequisites
+
+- Node.js (v18.0.0 or higher)
+- npm or yarn
+- OpenAI API key
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/ai-translate.git
+cd ai-translate
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up your environment variables:
+
+Create a `.env.local` file in the root directory based on the `.env.local.example` file:
+
+```
+NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key_here
+```
+
+Replace `your_openai_api_key_here` with your actual OpenAI API key.
+
+4. Start the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to Use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Video Translation
 
-## Learn More
+1. Select the "Video Translation" tab
+2. Choose between using your webcam or uploading a video
+3. Select your target language
+4. Click "Start Processing" to begin translating
+5. The translated text will appear as an overlay on the video
 
-To learn more about Next.js, take a look at the following resources:
+### Speech Translation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Select the "Speech Translation" tab
+2. Select your target language
+3. Click "Start Recording" and speak
+4. Click "Stop Recording" when you're done
+5. The app will transcribe your speech and translate it to the selected language
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+ai-translate/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx          # Main application page
+│   │   ├── layout.tsx        # Root layout
+│   │   └── globals.css       # Global styles
+│   ├── components/
+│   │   ├── Header.tsx        # Application header
+│   │   ├── TabSelector.tsx   # Tab navigation component
+│   │   ├── VideoTranslator.tsx # Video translation component
+│   │   ├── SpeechTranslator.tsx # Speech translation component
+│   │   └── LanguageSelector.tsx # Language selection component
+│   └── utils/
+│       ├── openai.ts         # OpenAI API utilities
+│       └── ocr.ts            # OCR utilities
+├── public/                  # Static assets
+└── .env.local.example       # Example environment variables
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Limitations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Video translation requires clear, readable text in the video for OCR to work effectively
+- Speech translation works best in quiet environments with clear speech
+- API rate limits may apply based on your OpenAI subscription
+
+## License
+
+MIT
+
+## Acknowledgements
+
+- [OpenAI](https://openai.com/) for providing the GPT-4 and Whisper APIs
+- [Next.js](https://nextjs.org/) for the React framework
+- [Tesseract.js](https://tesseract.projectnaptha.com/) for OCR capabilities
+- [TailwindCSS](https://tailwindcss.com/) for styling
