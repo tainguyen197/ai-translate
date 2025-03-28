@@ -104,52 +104,6 @@ const VideoTranslator: React.FC<VideoTranslatorProps> = ({
     }
   };
 
-  // // Combined function to process image and translate text with Gemini AI
-  // const processBlobAndTranslateWithGemini = async (
-  //   blob: Blob,
-  //   targetLang: string
-  // ): Promise<{ extractedText: string; translatedText: string }> => {
-  //   try {
-  //     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-  //     const prompt = `First, extract any text visible in the image. Then, translate that text to ${targetLang}.
-  //     Return the result in the following format ONLY:
-  //     Original: [extracted text]
-  //     Translation: [translated text]
-  //     If there's no clear text, return "Original: " and "Translation: " with empty values.`;
-
-  //     const formData = new FormData();
-  //     formData.append('image', blob, 'capture.jpg');
-
-  //     const result = await model.generateContent([
-  //       prompt,
-  //       {
-  //         inlineData: {
-  //           mimeType: "image/jpeg",
-  //           data: blob,
-  //         },
-  //         for
-  //       },
-  //     ]);
-
-  //     const response = await result.response;
-  //     const text = response.text().trim();
-
-  //     // Parse the response using a more compatible regex approach
-  //     const parts = text.split("Translation:");
-  //     const originalPart = parts[0].replace("Original:", "").trim();
-  //     const translationPart = parts[1] ? parts[1].trim() : "";
-
-  //     return {
-  //       extractedText: originalPart,
-  //       translatedText: translationPart,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error processing and translating with Gemini:", error);
-  //     return { extractedText: "", translatedText: "" };
-  //   }
-  // };
-
   const updateCanvas = () => {
     const videoElement = isWebcam ? webcamRef.current?.video : videoRef.current;
     const canvas = canvasRef.current;
@@ -361,13 +315,6 @@ const VideoTranslator: React.FC<VideoTranslatorProps> = ({
         );
       }
 
-      const blob = await captureFrameAsBlob(videoElement, tempCanvas);
-      if (!blob) {
-        return;
-      }
-
-      // await sendBlobToGemini(blob);
-
       // Convert temp canvas to base64 and process with Gemini
       const imageBase64 = canvasToBase64(tempCanvas);
       const { extractedText, translatedText } =
@@ -391,59 +338,10 @@ const VideoTranslator: React.FC<VideoTranslatorProps> = ({
         // Add a small delay to prevent overwhelming the API
         setTimeout(() => {
           requestAnimationFrame(processFrame);
-        }, delayRef.current); // 1 second delay between processing frames
+        }, delayRef.current);
       }
     }
   };
-
-  function captureFrameAsBlob(
-    videoElement: HTMLVideoElement,
-    canvasElement: HTMLCanvasElement,
-    quality = 0.8
-  ) {
-    // quality for jpeg
-    return new Promise((resolve, reject) => {
-      // Use JPEG for smaller size if quality loss is acceptable for OCR
-      canvasElement.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("Canvas toBlob returned null."));
-          }
-        },
-        "image/jpeg",
-        quality
-      ); // Or 'image/png'
-    });
-  }
-
-  async function sendBlobToGemini(blob: Blob) {
-    const formData = new FormData();
-    // Check Gemini API docs for the expected field name ('file', 'image', etc.)
-    formData.append("image", blob, "capture.jpg");
-    // Add other parameters if needed
-    // formData.append('prompt', 'Translate text in this image');
-
-    try {
-      // Use fetch to send multipart/form-data
-      const response = await fetch("/api/gemini-translate", {
-        // Your backend endpoint
-        method: "POST",
-        body: formData,
-        // No 'Content-Type' header needed for FormData, browser sets it
-      });
-
-      if (!response.ok) {
-        throw new Error(`Gemini API error: ${response.statusText}`);
-      }
-      const translationResult = await response.json();
-      console.log("Translation:", translationResult);
-      // Display translation
-    } catch (error) {
-      console.error("Error sending blob to Gemini:", error);
-    }
-  }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
