@@ -9,7 +9,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState("video");
-  const [targetLanguage, setTargetLanguage] = useState("Spanish");
+  const [targetLanguage, setTargetLanguage] = useState("Vietnamese");
 
   // Define tabs with icons
   const tabs = [

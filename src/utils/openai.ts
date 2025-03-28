@@ -8,7 +8,7 @@ const openai = new OpenAI({
 });
 
 // Debounce timeout in milliseconds
-const DEBOUNCE_TIMEOUT = 1000;
+const DEBOUNCE_TIMEOUT = 2000;
 
 // Cache for storing recent translations
 const translationCache = new Map<string, string>();
@@ -90,13 +90,13 @@ export async function debouncedTranslate(
       (isCompleteSentence(pendingText) || pendingText.length > 50)
     ) {
       console.log("Translating text:", pendingText);
-      // try {
-      //   const translatedText = await translateText(pendingText, targetLanguage);
-      //   translationCache.set(cacheKey, translatedText);
-      //   onTranslation(translatedText);
-      // } catch (error) {
-      //   console.error("Translation error:", error);
-      // }
+      try {
+        const translatedText = await translateText(pendingText, targetLanguage);
+        translationCache.set(cacheKey, translatedText);
+        onTranslation(translatedText);
+      } catch (error) {
+        console.error("Translation error:", error);
+      }
     }
   }, DEBOUNCE_TIMEOUT);
 }
